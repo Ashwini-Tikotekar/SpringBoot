@@ -1,0 +1,50 @@
+package com.bridgelabz.Fundoonotes.model;
+
+import java.io.Serializable;
+
+import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+//import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+@SuppressWarnings("serial")
+@Entity
+@Table(name= "MyNoteDB")
+public class NoteDetails implements Serializable {
+
+	
+		@Id
+	@GeneratedValue
+		@Column(name = "noteId")
+		private int noteId;
+
+		@Column(name = "Title")
+		private String Title;
+
+		@Column(name = "description")
+		private String description;
+
+		@CreationTimestamp
+		@Column(name = "created_Date")
+		private Timestamp created_Date;
+
+		@UpdateTimestamp
+		@Column(name="updated_Date")
+		private Timestamp updated_Date;
+
+		@Column(name="isArchive")
+		private boolean isArchive;
+
+		@Column(name="isPinned")
+		private boolean isPinned;
+
+		@Column(name="inTrash")
+		private boolean inTrash;
+
+}

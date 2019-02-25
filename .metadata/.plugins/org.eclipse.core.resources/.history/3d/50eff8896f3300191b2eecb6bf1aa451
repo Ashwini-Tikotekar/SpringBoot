@@ -1,0 +1,107 @@
+package com.bridgelabz.Fundoonotes.service;
+
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bridgelabz.Fundoonotes.dao.UserDetailsRepoistory;
+import com.bridgelabz.Fundoonotes.model.UserDetails;
+import com.bridgelabz.Fundoonotes.utility.EmailUtility;
+import com.bridgelabz.Fundoonotes.utility.TokenGenerator;
+
+@Service
+public class UserServiceImpl implements UserService{
+	@Autowired
+	private UserDetailsRepoistory userdetailsrepoistory;
+
+
+	@Autowired
+	private TokenGenerator tokenGenerator;
+
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
+	@Autowired
+	private EmailUtility emailUtilility;
+
+
+	public UserDetails register(UserDetails user,HttpServletRequest request) {
+		user.setPassword(bcryptEncoder.encode(user.getPassword()));
+		UserDetails newUser= userdetailsrepoistory.save(user);
+		String token = tokenGenerator.generateToken(String.valueOf(newUser.getId()));
+		System.out.println(token);
+		StringBuffer requestUrl = request.getRequestURL();
+		String activationUrl = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
+		activationUrl = activationUrl + "/activationstatus/" + token;
+		System.out.println(activationUrl);
+		emailUtilility.sendEmail("", "", activationUrl);
+		return user;
+	}
+
+
+
+
+	@Transactional
+	public UserDetails activateUser(String token, HttpServletRequest request) {
+		int id=tokenGenerator.VerifyToken(token);      
+		Optional<UserDetails> optional=userdetailsrepoistory.findById(id);
+		if(optional.isPresent())
+		{
+			UserDetails user=optional.get();
+			user.setActivate_Status(true);
+			//           userDao.updateUser(token, user);
+			return user;
+		}
+		return null;
+	}
+
+
+
+	@Override
+	public Optional<UserDetails> getUserDetails(int id) {
+
+		return userdetailsrepoistory.findById(id);
+	}
+
+	public UserDetails login(UserDetails user, HttpServletRequest request, HttpServletResponse response) {
+		UserDetails newUser = userdetailsrepoistory.findByEmailId(user.getEmailId());
+		System.out.println("newUser");
+		if (newUser != null) {
+			boolean match = bcryptEncoder.matches(user.getPassword(), newUser.getPassword());
+			if (match && newUser.isActivate_Status()) {
+				String token = tokenGenerator.generateToken(String.valueOf(newUser.getId()));
+				response.setHeader("token", token);
+				return newUser;
+			}
+
+		}
+		return null;
+
+	}
+	@Transactional
+	public UserDetails updateUser(String token, UserDetails user, HttpServletRequest request) {
+		int id = tokenGenerator.VerifyToken(token);
+		Optional<UserDetails> optional = userdetailsrepoistory.findById(id);
+		if(optional.isPresent()) {
+			UserDetails user2=optional.get();
+			
+		    user2.setEmailId(user.getEmailId());
+			user2.setMobileNumber(user.getMobileNumber());
+			user2.setName(user.getName());
+			user2.setPassword(user.getPassword());
+			
+			userdetailsrepoistory.save(user2);
+			return user2;
+		}
+		return null;
+	}
+
+
+}
+
+	

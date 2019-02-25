@@ -1,0 +1,12 @@
+package com.bridgelabz.Fundoonotes.dao;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.bridgelabz.Fundoonotes.model.Label;
+
+public interface LabelDetailsRepoistory extends JpaRepository<Label, Integer> {
+
+	List<Label> findAllById(int userId);
+}

@@ -1,0 +1,17 @@
+package com.bridgelabz.Fundoonotes.service;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.bridgelabz.Fundoonotes.model.UserDetails;
+
+public interface UserService {
+
+	UserDetails register(UserDetails user,HttpServletRequest request);
+	
+	UserDetails activateUser(String token, HttpServletRequest request);
+	 
+	Optional<UserDetails> getUserDetails(int id);
+	UserDetails login(UserDetails user);
+
+}

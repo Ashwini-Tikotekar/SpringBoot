@@ -1,0 +1,10 @@
+package com.bridgelabz.Fundoonotes.service;
+import com.bridgelabz.Fundoonotes.model.UserDetails;
+
+public interface UserService {
+
+	UserDetails register(UserDetails user);
+	
+	UserDetails login(UserDetails user);
+
+}

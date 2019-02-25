@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.internal.QuickAccess">
+		<item value="659" key="dialogHeight"/>
+		<item value="783" key="dialogWidth"/>
+		<list key="textEntries">
+			<item value="2"/>
+			<item value="1"/>
+			<item value="1"/>
+			<item value="1"/>
+			<item value="1"/>
+		</list>
+		<list key="orderedElements">
+			<item value="org.eclipse.ui.console.ConsoleView"/>
+			<item value="org.springframework.ide.eclipse.boot.dash.views.BootDashView"/>
+			<item value="org.eclipse.jdt.ui.PackageExplorer"/>
+			<item value="org.springframework.ide.eclipse.boot.dash.boot.dash.RedebugAction"/>
+			<item value="org.eclipse.ui.views.ResourceNavigator"/>
+		</list>
+		<list key="orderedProviders">
+			<item value="org.eclipse.e4.ui.parts"/>
+			<item value="org.eclipse.e4.ui.parts"/>
+			<item value="org.eclipse.e4.ui.parts"/>
+			<item value="org.eclipse.ui.commands"/>
+			<item value="org.eclipse.e4.ui.parts"/>
+		</list>
+		<list key="textArray">
+			<item value="con"/>
+			<item value="c"/>
+			<item value="boo"/>
+			<item value="pa"/>
+			<item value="boot"/>
+			<item value="na"/>
+		</list>
+	</section>
+</section>

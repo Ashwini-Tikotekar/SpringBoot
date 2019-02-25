@@ -1,0 +1,140 @@
+package com.bridgelabz.Fundoonotes.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.bridgelabz.Fundoonotes.dao.LabelDetailsRepoistory;
+import com.bridgelabz.Fundoonotes.dao.NoteDetailsRepoistory;
+import com.bridgelabz.Fundoonotes.model.Label;
+import com.bridgelabz.Fundoonotes.model.NoteDetails;
+//import com.bridgelabz.Fundoonotes.utility.EmailUtility;
+import com.bridgelabz.Fundoonotes.utility.TokenGenerator;
+@Service
+public class NoteServiceImpl implements NoteService{ 
+
+
+	@Autowired
+	private NoteDetailsRepoistory notedetailsrepoistory;
+
+	@Autowired
+	private LabelDetailsRepoistory labeldetailsrepoistory;
+
+	@Autowired
+	private TokenGenerator tokenGenerator;
+
+
+	//		@Autowired
+	//	private EmailUtility emailUtility;
+
+	@Override
+	public NoteDetails createNote(String token, NoteDetails note, HttpServletRequest request) {
+		int userId=tokenGenerator.VerifyToken(token);
+		note.setId(userId);;
+		NoteDetails savedNote=notedetailsrepoistory.save(note);
+		return savedNote;
+	}
+
+	public NoteDetails updateNote(String token,int id,NoteDetails note, HttpServletRequest request) {
+		int userId =tokenGenerator.VerifyToken(token);
+		Optional<NoteDetails> optional = notedetailsrepoistory.findById(id);
+
+		if(optional.isPresent())
+		{
+			NoteDetails existingNote=optional.get();
+			if(existingNote.getId()==userId) {
+				existingNote.setDescription(note.getDescription());
+				existingNote.setTitle(note.getTitle());
+
+				notedetailsrepoistory.save(existingNote);
+				return existingNote;
+			}
+		}
+		return null;
+	}  	
+
+	@Override
+	public Optional<NoteDetails>getNoteDetails(int id) {
+
+		return notedetailsrepoistory.findById(id);
+	}
+
+	public List<NoteDetails> retrieveNote(String token, HttpServletRequest request) {
+		int userId = tokenGenerator.VerifyToken(token);
+		List<NoteDetails> notes = notedetailsrepoistory.findAllById(userId);
+		if (!notes.isEmpty()) {     
+			return notes;
+		}
+		return null;
+	}
+
+
+	public NoteDetails deleteNote(String token, int id,HttpServletRequest request) {
+		int userId = tokenGenerator.VerifyToken(token);
+		Optional<NoteDetails> optional = notedetailsrepoistory.findById(id);
+
+		if(optional.isPresent())
+		{
+			NoteDetails existingNote=optional.get();
+			if (existingNote.getId()==userId) {
+				notedetailsrepoistory.delete(existingNote);
+				return existingNote;
+			}
+		}
+		return null;
+	}
+
+	public Label createLabel(String token,Label label,  HttpServletRequest request) {
+		int userId = tokenGenerator.VerifyToken(token);
+		if(userId>0) {
+			label.setUserId(userId);
+			labeldetailsrepoistory.save(label);
+			return label;
+		}
+		else 
+			return null;
+	}
+
+	public Label editLabel(String token,int id,Label label, HttpServletRequest request) {
+		int userId = tokenGenerator.VerifyToken(token);
+		Optional<Label> optional = labeldetailsrepoistory.findById(id);
+
+		if(optional.isPresent())
+		{
+			Label existingLabel=optional.get();
+			if(existingLabel.getUserId()==userId) {
+				existingLabel.setLabelName(label.getLabelName());
+				labeldetailsrepoistory.save(existingLabel);
+				return existingLabel;
+			}
+		}
+		return null;
+	} 
+
+	public List<Label> retrieveLabel(String token, HttpServletRequest request) {
+		int userId = tokenGenerator.VerifyToken(token);
+		List<Label> label = labeldetailsrepoistory.findAllByUserId(userId);
+		if (!label.isEmpty()) {     
+			return label;
+		}
+		return null;
+	}
+	
+	public Label deleteLabel(String token, int id,HttpServletRequest request) {
+		int userId = tokenGenerator.VerifyToken(token);
+		Optional<Label> optional = labeldetailsrepoistory.findBU
+		if(optional.isPresent())
+		{
+			Label existingLabel=optional.get();
+			if ( existingLabel!=null && existingLabel.getUserId()==userId) {
+				labeldetailsrepoistory.delete(existingLabel);
+				return existingLabel;
+			}
+		}
+		return null;
+	}
+}

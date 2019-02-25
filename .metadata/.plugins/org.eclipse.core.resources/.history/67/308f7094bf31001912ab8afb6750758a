@@ -1,0 +1,8 @@
+package com.bridgelabz.Fundoonotes.service;
+import com.bridgelabz.Fundoonotes.model.UserDetails;
+
+public interface UserService {
+
+	String register(UserDetails user);
+
+}

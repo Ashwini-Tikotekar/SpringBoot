@@ -1,0 +1,47 @@
+package com.bridgelabz.Fundoonotes.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.bridgelabz.Fundoonotes.model.NoteDetails;
+import com.bridgelabz.Fundoonotes.model.UserDetails;
+import com.bridgelabz.Fundoonotes.service.NoteService;
+
+public class NoteController {
+
+	@Autowired
+	private NoteService noteService;
+
+	@PostMapping(value="/createnote")
+	public ResponseEntity<?> createNote( @RequestBody NoteDetails note, HttpServletRequest request){
+
+		NoteDetails newuser=noteService.createNote(note,request);
+		if(newuser!=null) {
+			return new ResponseEntity<String>("successfully created!",HttpStatus.FOUND);
+		}
+		else {
+			return new ResponseEntity<String>("Failed to created",HttpStatus.CONFLICT);
+		}
+	}
+	@RequestMapping(value = "/activationstatus/{token:.+}", method = RequestMethod.GET)
+	public ResponseEntity<?> activateUser(@PathVariable("token") String token, HttpServletRequest request) {
+
+		NoteDetails note = noteService.activateUser(token, request);
+		if (note != null) {
+			return new ResponseEntity<NoteDetails>(note, HttpStatus.FOUND);
+		} else {
+			return new ResponseEntity<String>("Email incorrect. Please enter valid email address present in database",
+					HttpStatus.NOT_FOUND);
+		}
+	}
+}
+
+

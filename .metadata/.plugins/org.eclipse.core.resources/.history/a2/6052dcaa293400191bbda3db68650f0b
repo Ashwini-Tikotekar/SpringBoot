@@ -1,0 +1,67 @@
+package com.bridgelabz.Fundoonotes.service;
+
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.bridgelabz.Fundoonotes.dao.NoteDetailsRepoistory;
+import com.bridgelabz.Fundoonotes.model.NoteDetails;
+//import com.bridgelabz.Fundoonotes.utility.EmailUtility;
+import com.bridgelabz.Fundoonotes.utility.TokenGenerator;
+@Service
+public class NoteServiceImpl implements NoteService{ 
+
+	
+		@Autowired
+		private NoteDetailsRepoistory notedetailsrepoistory;
+
+
+		@Autowired
+		private TokenGenerator tokenGenerator;
+
+	
+//		@Autowired
+//	private EmailUtility emailUtility;
+
+		@Override
+	    public NoteDetails createNote(String token, NoteDetails note, HttpServletRequest request) {
+	        int userId=tokenGenerator.VerifyToken(token);
+	        note.setId(userId);;
+	        NoteDetails savedNote=notedetailsrepoistory.save(note);
+	        return savedNote;
+	    }
+		
+		public NoteDetails updateNote(String token,int id,NoteDetails note, HttpServletRequest request) {
+			int userId =tokenGenerator.VerifyToken(token);
+			Optional<NoteDetails> optional = notedetailsrepoistory.findById(id);
+
+			if(optional.isPresent())
+			{
+				NoteDetails existingNote=optional.get();
+			if(existingNote.getId()==userId) {
+			existingNote.setDescription(note.getDescription());
+			existingNote.setTitle(note.getTitle());
+
+			notedetailsrepoistory.save(existingNote);
+			return existingNote;
+			}
+			}
+			return null;
+			}  	
+
+
+		
+		
+		@Override
+		public Optional<NoteDetails>getNoteDetails(int id) {
+
+			return notedetailsrepoistory.findById(id);
+		}
+
+
+
+
+}

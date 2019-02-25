@@ -1,0 +1,12 @@
+package com.bridgelabz.Fundoonotes.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.bridgelabz.Fundoonotes.model.UserDetails;
+
+@Repository
+public interface UserDetailsRepoistory extends JpaRepository<UserDetails,Integer>{
+
+	findByemailId
+}

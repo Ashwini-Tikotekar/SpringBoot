@@ -1,0 +1,25 @@
+package com.bridgelabz.Fundoonotes.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.bridgelabz.Fundoonotes.dao.UserDetailsRepoistory;
+import com.bridgelabz.Fundoonotes.model.UserDetails;
+
+@Service
+public class UserServiceImpl implements UserService{
+@Autowired
+ private UserDetailsRepoistory userdetailsrepoistory;
+
+@Override
+public UserDetails register(UserDetails user) {
+	return userdetailsrepoistory.save(user);
+}
+
+@Override
+public UserDetails login(UserDetails user) {
+	return userdetailsrepoistory.findemailById(user);
+}
+
+
+}

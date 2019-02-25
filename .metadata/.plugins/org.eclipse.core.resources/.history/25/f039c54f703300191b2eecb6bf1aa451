@@ -1,0 +1,73 @@
+package com.bridgelabz.Fundoonotes.controller;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import com.bridgelabz.Fundoonotes.model.UserDetails;
+import com.bridgelabz.Fundoonotes.service.UserService;
+@Controller
+@RequestMapping("/user")
+public class UserController {
+
+	@Autowired
+	private UserService userservice;
+
+	@PostMapping(value="/register")
+	public ResponseEntity<?> register( @RequestBody UserDetails user, HttpServletRequest request){
+
+		UserDetails newuser=userservice.register(user,request);
+		if(newuser!=null) {
+			return new ResponseEntity<String>("successfully registered!",HttpStatus.FOUND);
+		}
+		else {
+			return new ResponseEntity<String>("Failed to register",HttpStatus.CONFLICT);
+		}
+
+	}
+	@RequestMapping(value = "/activationstatus/{token:.+}", method = RequestMethod.GET)
+    public ResponseEntity<?> activateUser(@PathVariable("token") String token, HttpServletRequest request) {
+
+        UserDetails user = userservice.activateUser(token, request);
+        if (user != null) {
+            return new ResponseEntity<UserDetails>(user, HttpStatus.FOUND);
+        } else {
+            return new ResponseEntity<String>("Email incorrect. Please enter valid email address present in database",
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
+	@PostMapping(value="/login")
+	public ResponseEntity<?> login(@RequestBody UserDetails user,HttpServletRequest request,HttpServletResponse response){
+
+		UserDetails newuser=userservice.login(user,request,response);
+		if(newuser!=null) {
+			return new ResponseEntity<UserDetails>(newuser,HttpStatus.FOUND);
+		}
+		else {
+			return new ResponseEntity<String>(HttpStatus.CONFLICT);
+		}
+
+	}
+	@PutMapping(value="/update")
+	   public ResponseEntity<?> updateUser(@RequestHeader("token") String token, @RequestBody UserDetails user,
+			HttpServletRequest request,HttpServletResponse response) {
+      // response.setHeader(token, token);
+		UserDetails user2 = userservice.updateUser(token,user,request);
+		if (user2 != null) {
+			return new ResponseEntity<UserDetails>(user2, HttpStatus.FOUND);
+		} else {
+			return new ResponseEntity<String>("Email incorrect. Please enter valid email address present in database",
+					HttpStatus.NOT_FOUND);
+		}
+	}
+}

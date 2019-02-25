@@ -1,0 +1,22 @@
+package com.bridgelabz.Fundoonotes.service;
+
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.http.HttpRequest;
+
+import com.bridgelabz.Fundoonotes.model.NoteDetails;
+
+
+public interface NoteService {
+	NoteDetails createNote(String token,NoteDetails note,HttpServletRequest request);
+
+//	NoteDetails activateUser(String token, HttpServletRequest request);
+
+	Optional<NoteDetails> getNoteDetails(int id);
+	
+	NoteDetails updateNote(String token,int id, NoteDetails note,HttpServletRequest request);
+	
+	NoteDetails retrieveNote(String token, HttpServletRequest request);
+}

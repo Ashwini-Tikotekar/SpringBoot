@@ -1,0 +1,12 @@
+package com.bridgelabz.Fundoonotes.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.bridgelabz.Fundoonotes.model.NoteDetails;
+
+
+public interface NoteDetailsRepoistory extends JpaRepository<NoteDetails,Integer>{
+	NoteDetails findAllByUserId();
+}
+
+

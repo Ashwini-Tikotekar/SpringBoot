@@ -1,0 +1,32 @@
+package com.bridgelabz.Fundoonotes.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.bridgelabz.Fundoonotes.model.NoteDetails;
+import com.bridgelabz.Fundoonotes.service.NoteService;
+
+public class NoteController {
+
+	@Autowired
+	private NoteService noteService;
+
+	@PostMapping(value="/createnote")
+	public ResponseEntity<?> createNote( @RequestBody NoteDetails note, HttpServletRequest request){
+
+		NoteDetails newuser=noteService.createNote(note,request);
+		if(newuser!=null) {
+			return new ResponseEntity<String>("successfully created!",HttpStatus.FOUND);
+		}
+		else {
+			return new ResponseEntity<String>("Failed to created",HttpStatus.CONFLICT);
+		}
+	}
+}
+
+

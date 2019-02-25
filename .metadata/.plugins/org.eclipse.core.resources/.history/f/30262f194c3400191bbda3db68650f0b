@@ -1,0 +1,61 @@
+package com.bridgelabz.Fundoonotes.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+@Entity
+@Table(name="MyNoteDB")
+
+public class Label implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue
+	@Column(name = "id")
+	private int LabelId;
+
+	@Column(name = "labelName")
+	private String labelName;
+	
+	@Column(name = "userId")
+	private int userId;
+
+	public int getLabelId() {
+		return LabelId;
+	}
+
+	public void setLabelId(int labelId) {
+		LabelId = labelId;
+	}
+
+	public String getLabelName() {
+		return labelName;
+	}
+
+	public void setLabelName(String labelName) {
+		this.labelName = labelName;
+	}
+
+	@Override
+	public String toString() {
+		return "Label [LabelId=" + LabelId + ", LabelName=" + labelName + "]";
+	}
+
+//	public int getId() {
+//		return userId;
+//	}
+//
+//	public void setuserId(int userId) {
+//		this.userId = userId;
+//	}
+//	
+	
+
+}
